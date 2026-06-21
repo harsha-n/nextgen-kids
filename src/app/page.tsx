@@ -12,34 +12,41 @@ import { SafetySection } from "@/components/sections/SafetySection";
 import { StatsSection } from "@/components/sections/StatsSection";
 import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
 import { WhyChooseUs } from "@/components/sections/WhyChooseUs";
-import { schoolConfig } from "@/data/school.config";
+import { getSchoolConfig } from "@/lib/runtime-config";
 import { generatePageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = generatePageMetadata("home");
+export const dynamic = "force-dynamic";
 
-export default function HomePage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSchoolConfig();
+  return generatePageMetadata("home", config);
+}
+
+export default async function HomePage() {
+  const config = await getSchoolConfig();
+
   return (
     <>
-      <HeroSection hero={schoolConfig.hero} schoolInfo={schoolConfig.schoolInfo} />
-      <StatsSection stats={schoolConfig.stats} />
-      <ProgramsSection programs={schoolConfig.programs} />
-      <WhyChooseUs data={schoolConfig.whyChooseUs} />
-      <SafetySection safety={schoolConfig.safety} />
-      <ActivitiesSection activities={schoolConfig.activities} />
-      <DaycareSection daycare={schoolConfig.daycare} />
-      <FacilitiesSection facilities={schoolConfig.facilities} />
-      <DailyRoutineSection dailyRoutine={schoolConfig.dailyRoutine} />
+      <HeroSection hero={config.hero} schoolInfo={config.schoolInfo} />
+      <StatsSection stats={config.stats} />
+      <ProgramsSection programs={config.programs} />
+      <WhyChooseUs data={config.whyChooseUs} />
+      <SafetySection safety={config.safety} />
+      <ActivitiesSection activities={config.activities} />
+      <DaycareSection daycare={config.daycare} />
+      <FacilitiesSection facilities={config.facilities} />
+      <DailyRoutineSection dailyRoutine={config.dailyRoutine} />
       <GalleryGrid
         gallery={{
-          eyebrow: schoolConfig.gallery.eyebrow,
-          title: schoolConfig.gallery.previewTitle,
-          description: schoolConfig.gallery.previewDescription
+          eyebrow: config.gallery.eyebrow,
+          title: config.gallery.previewTitle,
+          description: config.gallery.previewDescription
         }}
-        items={schoolConfig.gallery.items.slice(0, 6)}
+        items={config.gallery.items.slice(0, 6)}
       />
-      <TestimonialsSection testimonials={schoolConfig.testimonials} />
-      <FAQSection faqs={schoolConfig.faqs} limit={5} />
-      <AdmissionCTA cta={schoolConfig.ctas.admission} />
+      <TestimonialsSection testimonials={config.testimonials} />
+      <FAQSection faqs={config.faqs} limit={5} />
+      <AdmissionCTA cta={config.ctas.admission} />
     </>
   );
 }

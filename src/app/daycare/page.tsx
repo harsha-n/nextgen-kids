@@ -4,19 +4,26 @@ import { DailyRoutineSection } from "@/components/sections/DailyRoutineSection";
 import { DaycareSection } from "@/components/sections/DaycareSection";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { SafetySection } from "@/components/sections/SafetySection";
-import { schoolConfig } from "@/data/school.config";
+import { getSchoolConfig } from "@/lib/runtime-config";
 import { generatePageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = generatePageMetadata("daycare");
+export const dynamic = "force-dynamic";
 
-export default function DaycarePage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSchoolConfig();
+  return generatePageMetadata("daycare", config);
+}
+
+export default async function DaycarePage() {
+  const config = await getSchoolConfig();
+
   return (
     <>
-      <PageHeader content={schoolConfig.pageContent.daycare} />
-      <DaycareSection daycare={schoolConfig.daycare} />
-      <SafetySection safety={schoolConfig.safety} />
-      <DailyRoutineSection dailyRoutine={schoolConfig.dailyRoutine} />
-      <AdmissionCTA cta={schoolConfig.ctas.contact} />
+      <PageHeader content={config.pageContent.daycare} />
+      <DaycareSection daycare={config.daycare} />
+      <SafetySection safety={config.safety} />
+      <DailyRoutineSection dailyRoutine={config.dailyRoutine} />
+      <AdmissionCTA cta={config.ctas.contact} />
     </>
   );
 }

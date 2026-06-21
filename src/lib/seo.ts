@@ -1,35 +1,38 @@
 import type { Metadata } from "next";
-import { schoolConfig, type PageSeo } from "@/data/school.config";
+import { schoolConfig, type PageSeo, type SchoolConfig } from "@/data/school.config";
 
-export function absoluteUrl(path = "/") {
+export function absoluteUrl(path = "/", config: SchoolConfig = schoolConfig) {
   if (/^https?:\/\//.test(path)) {
     return path;
   }
 
-  const domain = schoolConfig.schoolInfo.domain.replace(/\/$/, "");
+  const domain = config.schoolInfo.domain.replace(/\/$/, "");
   return `${domain}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
-export function getPageSeo(pageKey: keyof typeof schoolConfig.seo.pages): PageSeo {
-  return schoolConfig.seo.pages[pageKey] ?? schoolConfig.seo.pages.home;
+export function getPageSeo(pageKey: string, config: SchoolConfig = schoolConfig): PageSeo {
+  return config.seo.pages[pageKey] ?? config.seo.pages.home;
 }
 
-export function generatePageMetadata(pageKey: keyof typeof schoolConfig.seo.pages): Metadata {
-  const page = getPageSeo(pageKey);
+export function generatePageMetadata(
+  pageKey: string,
+  config: SchoolConfig = schoolConfig
+): Metadata {
+  const page = getPageSeo(pageKey, config);
   const title =
     pageKey === "home"
-      ? schoolConfig.seo.defaultTitle
-      : schoolConfig.seo.titleTemplate.replace("%s", page.title);
-  const description = page.description || schoolConfig.seo.defaultDescription;
-  const canonical = absoluteUrl(page.path);
-  const ogImage = absoluteUrl(page.ogImage || schoolConfig.seo.ogImage);
+      ? config.seo.defaultTitle
+      : config.seo.titleTemplate.replace("%s", page.title);
+  const description = page.description || config.seo.defaultDescription;
+  const canonical = absoluteUrl(page.path, config);
+  const ogImage = absoluteUrl(page.ogImage || config.seo.ogImage, config);
 
   return {
     title,
     description,
     keywords: page.keywords,
     icons: {
-      icon: schoolConfig.schoolInfo.favicon,
+      icon: config.schoolInfo.favicon,
       apple: "/apple-icon.png"
     },
     alternates: {
@@ -39,13 +42,13 @@ export function generatePageMetadata(pageKey: keyof typeof schoolConfig.seo.page
       title,
       description,
       url: canonical,
-      siteName: schoolConfig.schoolInfo.name,
+      siteName: config.schoolInfo.name,
       images: [
         {
           url: ogImage,
           width: 1600,
           height: 901,
-          alt: `${schoolConfig.schoolInfo.name} preschool`
+          alt: `${config.schoolInfo.name} preschool`
         }
       ],
       locale: "en_IN",
@@ -64,8 +67,8 @@ export function generatePageMetadata(pageKey: keyof typeof schoolConfig.seo.page
   };
 }
 
-export function getJsonLd() {
-  const { schoolInfo } = schoolConfig;
+export function getJsonLd(config: SchoolConfig = schoolConfig) {
+  const { schoolInfo } = config;
 
   return {
     "@context": "https://schema.org",
@@ -87,10 +90,10 @@ export function getJsonLd() {
     })),
     foundingDate: schoolInfo.establishedYear,
     openingHours: schoolInfo.timings,
-    image: absoluteUrl(schoolConfig.seo.ogImage),
-    logo: absoluteUrl(schoolInfo.logo.src),
+    image: absoluteUrl(config.seo.ogImage, config),
+    logo: absoluteUrl(schoolInfo.logo.src, config),
     sameAs: schoolInfo.socialLinks.map((link) => link.href),
-    makesOffer: schoolConfig.programs.items.map((program) => ({
+    makesOffer: config.programs.items.map((program) => ({
       "@type": "Offer",
       itemOffered: {
         "@type": "EducationalOccupationalProgram",

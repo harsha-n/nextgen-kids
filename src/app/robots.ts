@@ -1,14 +1,16 @@
 import type { MetadataRoute } from "next";
-import { schoolConfig } from "@/data/school.config";
+import { getSchoolConfig } from "@/lib/runtime-config";
 import { absoluteUrl } from "@/lib/seo";
 
-export default function robots(): MetadataRoute.Robots {
+export default async function robots(): Promise<MetadataRoute.Robots> {
+  const config = await getSchoolConfig();
+
   return {
     rules: {
       userAgent: "*",
       allow: "/"
     },
-    sitemap: absoluteUrl("/sitemap.xml"),
-    host: schoolConfig.schoolInfo.domain
+    sitemap: absoluteUrl("/sitemap.xml", config),
+    host: config.schoolInfo.domain
   };
 }

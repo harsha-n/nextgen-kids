@@ -2,17 +2,24 @@ import type { Metadata } from "next";
 import { AdmissionCTA } from "@/components/sections/AdmissionCTA";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { PageHeader } from "@/components/sections/PageHeader";
-import { schoolConfig } from "@/data/school.config";
+import { getSchoolConfig } from "@/lib/runtime-config";
 import { generatePageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = generatePageMetadata("faqs");
+export const dynamic = "force-dynamic";
 
-export default function FAQsPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSchoolConfig();
+  return generatePageMetadata("faqs", config);
+}
+
+export default async function FAQsPage() {
+  const config = await getSchoolConfig();
+
   return (
     <>
-      <PageHeader content={schoolConfig.pageContent.faqs} />
-      <FAQSection faqs={schoolConfig.faqs} />
-      <AdmissionCTA cta={schoolConfig.ctas.contact} />
+      <PageHeader content={config.pageContent.faqs} />
+      <FAQSection faqs={config.faqs} />
+      <AdmissionCTA cta={config.ctas.contact} />
     </>
   );
 }

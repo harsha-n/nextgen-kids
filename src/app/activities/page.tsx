@@ -3,25 +3,32 @@ import { ActivitiesSection } from "@/components/sections/ActivitiesSection";
 import { AdmissionCTA } from "@/components/sections/AdmissionCTA";
 import { GalleryGrid } from "@/components/sections/GalleryGrid";
 import { PageHeader } from "@/components/sections/PageHeader";
-import { schoolConfig } from "@/data/school.config";
+import { getSchoolConfig } from "@/lib/runtime-config";
 import { generatePageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = generatePageMetadata("activities");
+export const dynamic = "force-dynamic";
 
-export default function ActivitiesPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSchoolConfig();
+  return generatePageMetadata("activities", config);
+}
+
+export default async function ActivitiesPage() {
+  const config = await getSchoolConfig();
+
   return (
     <>
-      <PageHeader content={schoolConfig.pageContent.activities} />
-      <ActivitiesSection activities={schoolConfig.activities} />
+      <PageHeader content={config.pageContent.activities} />
+      <ActivitiesSection activities={config.activities} />
       <GalleryGrid
         gallery={{
-          eyebrow: schoolConfig.gallery.eyebrow,
-          title: schoolConfig.gallery.previewTitle,
-          description: schoolConfig.gallery.previewDescription
+          eyebrow: config.gallery.eyebrow,
+          title: config.gallery.previewTitle,
+          description: config.gallery.previewDescription
         }}
-        items={schoolConfig.gallery.items.slice(0, 6)}
+        items={config.gallery.items.slice(0, 6)}
       />
-      <AdmissionCTA cta={schoolConfig.ctas.admission} />
+      <AdmissionCTA cta={config.ctas.admission} />
     </>
   );
 }

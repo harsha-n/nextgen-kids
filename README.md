@@ -43,15 +43,72 @@ Google Apps Script setup:
 
 For local testing, copy `.env.example` to `.env.local` and fill both variables. The WhatsApp button after successful submission uses `schoolInfo.whatsapp` and `contact.whatsappCtaMessage` from `src/data/school.config.ts`.
 
+## Admin CMS
+
+The protected admin area is available at:
+
+```txt
+/admin
+```
+
+Use it to update public website content, fees, FAQs, testimonials, page SEO, gallery images, and named website image slots such as Home Hero, Contact Header, Safety Main, and Program images.
+
+Admin content storage:
+
+- `src/data/school.config.ts` remains the locked default/fallback seed.
+- Supabase `school_config` stores the live editable public config.
+- Supabase `media_assets` stores uploaded image metadata.
+- Supabase Storage bucket `school-media` stores uploaded images.
+- Secrets are not editable in admin and must stay in environment variables.
+
+Supabase setup:
+
+1. Create a Supabase project.
+2. In Supabase SQL Editor, run `scripts/supabase/schema.sql`.
+3. Copy the project URL into `NEXT_PUBLIC_SUPABASE_URL`.
+4. Copy the service role key into `SUPABASE_SERVICE_ROLE_KEY`.
+5. Keep the service role key only in `.env.local` and Vercel environment variables. Do not expose it in browser code or admin content.
+
+Admin login environment variables:
+
+```bash
+ADMIN_USERNAME="admin"
+ADMIN_SESSION_SECRET="use-a-long-random-secret"
+ADMIN_PASSWORD_HASH="hmac-sha256-hash"
+```
+
+Generate the password hash locally:
+
+```bash
+ADMIN_SESSION_SECRET="same-secret-used-above" ADMIN_PASSWORD="your-admin-password" node -e 'const crypto = require("crypto"); console.log(crypto.createHmac("sha256", process.env.ADMIN_SESSION_SECRET).update(process.env.ADMIN_PASSWORD).digest("hex"))'
+```
+
+Only store the generated hash in `ADMIN_PASSWORD_HASH`; do not store the plain password in the repo.
+
+Protection model:
+
+- `/admin/login` is public so authorized staff can sign in.
+- `/admin` redirects to `/admin/login` without a valid signed session.
+- `/api/admin/config`, `/api/admin/upload`, `/api/admin/status`, image restore, gallery restore, and logout require a valid signed admin cookie.
+- Parent enquiry submission remains public at `/api/enquiry`, with honeypot, rate limit, server validation, and shared-secret forwarding to Apps Script.
+
+Default image restore:
+
+- Default images in `public/images` and `public/brand` are never overwritten by uploads.
+- Uploaded files go to Supabase Storage.
+- Each image slot in admin shows current and default previews.
+- “Restore default” resets that slot back to the original repo image.
+- “Restore default gallery” restores the original configured gallery list.
+
 ## Edit Website Data
 
-All editable school content is centralized in:
+Default school content is centralized in:
 
 ```txt
 src/data/school.config.ts
 ```
 
-Update this file for:
+Update this file for the default seed/fallback:
 
 - School name, tagline, city, phone, WhatsApp, email, address, timings, domain, and map URL
 - SEO titles, descriptions, keywords, canonical paths, and Open Graph image
@@ -59,6 +116,8 @@ Update this file for:
 - Hero content, trust badges, stats, programs, daycare, facilities, activities, daily routine, safety, admissions, fees, faculty, gallery, testimonials, FAQs, and contact form copy
 
 Do not hardcode school-specific content inside pages or components.
+
+After Supabase is configured, normal content edits should be made through `/admin`; those changes update the live site without a new deployment.
 
 ## Images And Brand Assets
 
@@ -81,10 +140,18 @@ Before launch, verify every photo has parent-approved usage rights and accurate 
 1. Push this repository to GitHub.
 2. In Vercel, choose **Add New Project**.
 3. Import the GitHub repository.
-4. Keep the default Next.js build settings:
+4. Add environment variables:
+   - `GOOGLE_APPS_SCRIPT_ENQUIRY_URL`
+   - `ENQUIRY_SHARED_SECRET`
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+   - `ADMIN_USERNAME`
+   - `ADMIN_PASSWORD_HASH`
+   - `ADMIN_SESSION_SECRET`
+5. Keep the default Next.js build settings:
    - Build command: `yarn build`
    - Output: managed by Next.js
-5. Deploy.
+6. Deploy.
 
 ## Connect A Custom Domain
 

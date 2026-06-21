@@ -5,37 +5,44 @@ import { AdmissionCTA } from "@/components/sections/AdmissionCTA";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { SectionHeading } from "@/components/sections/SectionHeading";
 import { Card, CardContent } from "@/components/ui/card";
-import { schoolConfig } from "@/data/school.config";
+import { getSchoolConfig } from "@/lib/runtime-config";
 import { generatePageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = generatePageMetadata("fees");
+export const dynamic = "force-dynamic";
 
-export default function FeesPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSchoolConfig();
+  return generatePageMetadata("fees", config);
+}
+
+export default async function FeesPage() {
+  const config = await getSchoolConfig();
+
   return (
     <>
-      <PageHeader content={schoolConfig.pageContent.fees} />
+      <PageHeader content={config.pageContent.fees} />
       <section className="section-padding bg-white">
         <div className="container">
           <SectionHeading
-            eyebrow={schoolConfig.fees.eyebrow}
-            title={schoolConfig.fees.title}
-            description={schoolConfig.fees.description}
+            eyebrow={config.fees.eyebrow}
+            title={config.fees.title}
+            description={config.fees.description}
           />
 
           <div className="mx-auto mt-12 max-w-5xl overflow-x-auto rounded-lg border bg-white shadow-sm">
             <table className="w-full min-w-[720px] text-left text-sm">
               <thead className="bg-gradient-to-r from-sunshine-500 to-coral-500 text-white">
                 <tr>
-                  <th className="px-5 py-4 font-extrabold">{schoolConfig.fees.tableHeaders.program}</th>
-                  <th className="px-5 py-4 font-extrabold">{schoolConfig.fees.tableHeaders.age}</th>
-                  <th className="px-5 py-4 font-extrabold">{schoolConfig.fees.tableHeaders.admissionFee}</th>
-                  <th className="px-5 py-4 font-extrabold">{schoolConfig.fees.tableHeaders.monthlyFee}</th>
-                  <th className="px-5 py-4 font-extrabold">{schoolConfig.fees.tableHeaders.includes}</th>
+                  <th className="px-5 py-4 font-extrabold">{config.fees.tableHeaders.program}</th>
+                  <th className="px-5 py-4 font-extrabold">{config.fees.tableHeaders.age}</th>
+                  <th className="px-5 py-4 font-extrabold">{config.fees.tableHeaders.admissionFee}</th>
+                  <th className="px-5 py-4 font-extrabold">{config.fees.tableHeaders.monthlyFee}</th>
+                  <th className="px-5 py-4 font-extrabold">{config.fees.tableHeaders.includes}</th>
                 </tr>
               </thead>
               <tbody>
-                {schoolConfig.fees.items.map((fee, index) => {
-                  const age = schoolConfig.admissions.ageCriteria.find(
+                {config.fees.items.map((fee, index) => {
+                  const age = config.admissions.ageCriteria.find(
                     (item) => item.program === fee.program
                   )?.age;
                   return (
@@ -58,7 +65,7 @@ export default function FeesPage() {
           <div className="mx-auto mt-6 flex max-w-5xl items-start gap-3 rounded-lg border border-skysoft-100 bg-skysoft-50 p-4">
             <Info className="mt-0.5 h-5 w-5 shrink-0 text-skysoft-700" aria-hidden="true" />
             <p className="text-sm font-semibold leading-6 text-skysoft-700">
-              {schoolConfig.fees.note}
+              {config.fees.note}
             </p>
           </div>
         </div>
@@ -71,11 +78,11 @@ export default function FeesPage() {
               <div className="flex items-center gap-2">
                 <CreditCard className="h-5 w-5 text-coral-500" aria-hidden="true" />
                 <h2 className="text-xl font-extrabold text-slate-950">
-                  {schoolConfig.fees.paymentModesTitle}
+                  {config.fees.paymentModesTitle}
                 </h2>
               </div>
               <ul className="mt-5 space-y-3">
-                {schoolConfig.fees.paymentModes.map((mode) => (
+                {config.fees.paymentModes.map((mode) => (
                   <li key={mode} className="flex gap-2 text-sm text-slate-700">
                     <Check className="mt-0.5 h-4 w-4 shrink-0 text-mint-500" aria-hidden="true" />
                     <span>{mode}</span>
@@ -88,23 +95,23 @@ export default function FeesPage() {
           <Card className="bg-gradient-to-br from-white to-coral-50">
             <CardContent className="p-6">
               <h2 className="text-xl font-extrabold text-slate-950">
-                {schoolConfig.fees.scholarshipTitle}
+                {config.fees.scholarshipTitle}
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                {schoolConfig.fees.scholarshipInfo}
+                {config.fees.scholarshipInfo}
               </p>
               <Link
-                href={schoolConfig.fees.contactCta.href}
-                aria-label={schoolConfig.fees.contactCta.ariaLabel}
+                href={config.fees.contactCta.href}
+                aria-label={config.fees.contactCta.ariaLabel}
                 className="mt-5 inline-flex rounded-md bg-coral-500 px-5 py-3 text-sm font-extrabold text-white transition hover:bg-coral-600"
               >
-                {schoolConfig.fees.contactCta.label}
+                {config.fees.contactCta.label}
               </Link>
             </CardContent>
           </Card>
         </div>
       </section>
-      <AdmissionCTA cta={schoolConfig.ctas.admission} />
+      <AdmissionCTA cta={config.ctas.admission} />
     </>
   );
 }

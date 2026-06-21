@@ -3,10 +3,10 @@ import "./globals.css";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
 import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
-import { schoolConfig } from "@/data/school.config";
+import { getSchoolConfig } from "@/lib/runtime-config";
 import { generatePageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = generatePageMetadata("home");
+export const dynamic = "force-dynamic";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -14,18 +14,25 @@ export const viewport: Viewport = {
   themeColor: "#ef6f61"
 };
 
-export default function RootLayout({
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSchoolConfig();
+  return generatePageMetadata("home", config);
+}
+
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const config = await getSchoolConfig();
+
   return (
     <html lang="en">
       <body>
-        <SEOJsonLd />
-        <Navbar config={schoolConfig} />
+        <SEOJsonLd config={config} />
+        <Navbar config={config} />
         <main>{children}</main>
-        <Footer config={schoolConfig} />
+        <Footer config={config} />
       </body>
     </html>
   );
