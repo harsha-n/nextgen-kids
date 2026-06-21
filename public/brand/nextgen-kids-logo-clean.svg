@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">NextGen Kids Play School</title>
+  <desc id="desc">Clean NextGen Kids logo without alternate prefix text</desc>
+  <rect width="512" height="512" rx="96" fill="#ffffff"/>
+  <circle cx="120" cy="120" r="38" fill="#38bdf8"/>
+  <circle cx="392" cy="120" r="38" fill="#f97388"/>
+  <circle cx="256" cy="84" r="36" fill="#facc15"/>
+  <path d="M139 212c32-46 73-69 117-69s85 23 117 69" fill="none" stroke="#22c55e" stroke-width="24" stroke-linecap="round"/>
+  <path d="M167 197c17 18 45 32 89 32s72-14 89-32" fill="none" stroke="#0ea5e9" stroke-width="18" stroke-linecap="round"/>
+  <rect x="65" y="252" width="382" height="146" rx="36" fill="#fff7ed" stroke="#fed7aa" stroke-width="8"/>
+  <text x="256" y="321" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="62" font-weight="900" fill="#0f172a">NextGen</text>
+  <text x="256" y="381" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="64" font-weight="900" fill="#ec4899">Kids</text>
+  <path d="M150 427h212" stroke="#0ea5e9" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="128" cy="427" r="12" fill="#f97316"/>
+  <circle cx="384" cy="427" r="12" fill="#22c55e"/>
+</svg>
