@@ -7,6 +7,10 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 const RATE_LIMIT_MAX = 5;
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
+type AppsScriptResponse = {
+  ok?: boolean;
+};
+
 function getClientKey(request: NextRequest) {
   const forwardedFor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
   const realIp = request.headers.get("x-real-ip")?.trim();
@@ -28,6 +32,39 @@ function isRateLimited(key: string) {
 
 function jsonResponse(status: number, message: string) {
   return NextResponse.json({ ok: status >= 200 && status < 300, message }, { status });
+}
+
+async function readAppsScriptResult(response: Response) {
+  if (response.status >= 300 && response.status < 400) {
+    const redirectUrl = response.headers.get("location");
+
+    if (!redirectUrl) {
+      return false;
+    }
+
+    const redirectResponse = await fetch(redirectUrl, {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      },
+      cache: "no-store"
+    });
+
+    if (!redirectResponse.ok) {
+      return false;
+    }
+
+    const result = (await redirectResponse.json()) as AppsScriptResponse;
+    return result.ok === true;
+  }
+
+  if (!response.ok) {
+    return false;
+  }
+
+  const resultText = await response.text();
+  const result = resultText ? (JSON.parse(resultText) as AppsScriptResponse) : { ok: true };
+  return result.ok === true;
 }
 
 export async function POST(request: NextRequest) {
@@ -61,6 +98,7 @@ export async function POST(request: NextRequest) {
   try {
     const response = await fetch(scriptUrl, {
       method: "POST",
+      redirect: "manual",
       headers: {
         "Content-Type": "text/plain;charset=utf-8"
       },
@@ -72,13 +110,7 @@ export async function POST(request: NextRequest) {
       cache: "no-store"
     });
 
-    if (!response.ok) {
-      return jsonResponse(502, "We could not submit your enquiry right now. Please try again or WhatsApp us.");
-    }
-
-    const resultText = await response.text();
-    const result = resultText ? (JSON.parse(resultText) as { ok?: boolean }) : { ok: true };
-    if (result.ok !== true) {
+    if (!(await readAppsScriptResult(response))) {
       return jsonResponse(502, "We could not submit your enquiry right now. Please try again or WhatsApp us.");
     }
 

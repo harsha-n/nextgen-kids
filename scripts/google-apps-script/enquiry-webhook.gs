@@ -29,7 +29,7 @@ function doPost(e) {
       payload.parentName || "",
       payload.childName || "",
       payload.childAge || "",
-      payload.phone || "",
+      plainText(payload.phone),
       payload.email || "",
       payload.program || "",
       payload.preferredVisitDate || "",
@@ -106,8 +106,11 @@ function escapeHtml(value) {
     .replace(/'/g, "&#039;");
 }
 
+function plainText(value) {
+  const text = String(value || "");
+  return text ? `'${text}` : "";
+}
+
 function jsonResponse(body) {
-  return ContentService.createTextOutput(JSON.stringify(body)).setMimeType(
-    ContentService.MimeType.JSON
-  );
+  return HtmlService.createHtmlOutput(JSON.stringify(body));
 }
