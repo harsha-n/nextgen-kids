@@ -460,10 +460,10 @@ export const schoolConfig: SchoolConfig = {
     boardOrApproach: "Play-way, activity-based, kindergarten-readiness approach",
     phone: "+91 85208 15889",
     whatsapp: "+91 85208 15889",
-    email: "admissions@nextgenkids.in",
+    email: "admissions@nextgenkidsvizag.com",
     address: schoolAddress,
     googleMapsUrl,
-    domain: "https://www.nextgenkids.in",
+    domain: "https://www.nextgenkidsvizag.com",
     timings: "Monday to Saturday, 9:00 AM to 6:00 PM",
     establishedYear: "2026",
     nearbyAreas: [
@@ -1506,7 +1506,7 @@ export const schoolConfig: SchoolConfig = {
       },
       {
         title: "Email",
-        description: "admissions@nextgenkids.in",
+        description: "admissions@nextgenkidsvizag.com",
         icon: "mail"
       },
       {
