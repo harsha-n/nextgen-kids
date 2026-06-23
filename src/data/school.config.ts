@@ -571,7 +571,7 @@ export const schoolConfig: SchoolConfig = {
       fees: {
         title: "Preschool Fees",
         description:
-          "View configurable fee placeholders for Play Group, Nursery, LKG, UKG, daycare, dance, and music at NextGen Kids.",
+          "View fee guidance for Play Group, Nursery, LKG, UKG, daycare, dance, and music at NextGen Kids.",
         path: "/fees",
         keywords: ["preschool fees Vishakapatnam", "daycare fees Vishakapatnam", ...sharedKeywords]
       },
@@ -762,9 +762,9 @@ export const schoolConfig: SchoolConfig = {
     },
     fees: {
       eyebrow: "Fees",
-      title: "Configurable fee information for every program",
+      title: "Fee guidance for every program",
       description:
-        "The fee structure is intentionally editable from one file so the school team can update admission, monthly, daycare, dance, and music details before launch.",
+        "Understand admission fees, monthly fees, daycare options, dance and music choices, and included services before planning a visit.",
       image: images.classroomTwo
     },
     faqs: {
@@ -1197,11 +1197,11 @@ export const schoolConfig: SchoolConfig = {
   },
   fees: {
     eyebrow: "Fee structure",
-    title: "Fee details kept editable in one file",
+    title: "Clear fee guidance for preschool and daycare",
     description:
-      "Update admission fees, monthly fees, daycare charges, dance and music options, and included services directly from the central school config.",
+      "Review program-wise fee guidance for Play Group, Nursery, LKG, UKG, daycare, dance, and music options.",
     note:
-      "Fee values are placeholders until the school office confirms the final approved 2026-27 structure. Edit only this config file before launch.",
+      "Final fee details, payment schedule, and optional activity charges can be confirmed with the admissions office during your visit.",
     tableHeaders: {
       program: "Program",
       age: "Age group",
@@ -1256,7 +1256,7 @@ export const schoolConfig: SchoolConfig = {
     eyebrow: "Teachers and care team",
     title: "Caring early-years educators",
     description:
-      "Teacher profiles are configurable so the school can replace these role-based placeholders with final staff names, photos, and specialties anytime.",
+      "Meet the caring early-years educators who support children with warmth, patience, classroom routines, and joyful activity-based learning.",
     teachers: [
       {
         name: "Play Group Mentor",
@@ -1288,7 +1288,7 @@ export const schoolConfig: SchoolConfig = {
     eyebrow: "Gallery",
     title: "A colorful peek into preschool life",
     description:
-      "Every image is configurable with alt text and category so the gallery can grow with new real campus photos.",
+      "Explore real campus, classroom, activity, story corner, play area, and entry photos from NextGen Kids Play School.",
     previewTitle: "Real moments parents love to see",
     previewDescription:
       "A quick look at the campus, classrooms, early writing, indoor play, story corner, and entry routines.",
@@ -1335,7 +1335,7 @@ export const schoolConfig: SchoolConfig = {
     eyebrow: "Parent voices",
     title: "Families look for care, routine, and communication",
     description:
-      "These sample testimonials are editable placeholders. Replace them with verified parent reviews before launch.",
+      "Parents value a preschool where children feel safe, teachers communicate clearly, and daily routines feel warm and dependable.",
     items: [
       {
         quote:
@@ -1364,7 +1364,7 @@ export const schoolConfig: SchoolConfig = {
     eyebrow: "FAQs",
     title: "Helpful answers for preschool parents",
     description:
-      "These parent-focused FAQs are editable from the central config and can be expanded anytime.",
+      "Clear answers about age groups, daycare, safety, timings, parent communication, admissions, activities, and required documents.",
     items: [
       {
         question: "What is the right age to join play school?",
