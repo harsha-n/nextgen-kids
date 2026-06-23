@@ -9,6 +9,22 @@ function getSupabaseEnv() {
   return { url, serviceRoleKey };
 }
 
+function getHeaders(serviceRoleKey: string, contentType?: string) {
+  const headers: Record<string, string> = {
+    apikey: serviceRoleKey
+  };
+
+  if (contentType) {
+    headers["Content-Type"] = contentType;
+  }
+
+  if (!serviceRoleKey.startsWith("sb_secret_")) {
+    headers.Authorization = `Bearer ${serviceRoleKey}`;
+  }
+
+  return headers;
+}
+
 export function isStorageConfigured() {
   const { url, serviceRoleKey } = getSupabaseEnv();
   return Boolean(url && serviceRoleKey);
@@ -52,9 +68,7 @@ export async function uploadImageToSupabase({
   const response = await fetch(uploadUrl, {
     method: "POST",
     headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-      "Content-Type": file.type || "application/octet-stream",
+      ...getHeaders(serviceRoleKey, file.type || "application/octet-stream"),
       "x-upsert": "false"
     },
     body: await file.arrayBuffer(),
@@ -94,11 +108,7 @@ async function recordMediaAsset({
 
   const response = await fetch(`${url}/rest/v1/media_assets`, {
     method: "POST",
-    headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-      "Content-Type": "application/json"
-    },
+    headers: getHeaders(serviceRoleKey, "application/json"),
     body: JSON.stringify({
       slot_key: slotKey,
       label: slotKey,

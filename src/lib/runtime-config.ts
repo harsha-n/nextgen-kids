@@ -22,11 +22,16 @@ function isSupabaseConfigured() {
 function getHeaders() {
   const { serviceRoleKey } = getSupabaseEnv();
 
-  return {
+  const headers: Record<string, string> = {
     apikey: serviceRoleKey ?? "",
-    Authorization: `Bearer ${serviceRoleKey ?? ""}`,
     "Content-Type": "application/json"
   };
+
+  if (serviceRoleKey && !serviceRoleKey.startsWith("sb_secret_")) {
+    headers.Authorization = `Bearer ${serviceRoleKey}`;
+  }
+
+  return headers;
 }
 
 export function getDefaultSchoolConfig() {
