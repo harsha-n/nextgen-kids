@@ -128,6 +128,7 @@ public/images/
 public/brand/
 src/app/icon.png
 src/app/apple-icon.png
+public/favicon.ico
 public/favicon.png
 ```
 

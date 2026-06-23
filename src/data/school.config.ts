@@ -475,7 +475,7 @@ export const schoolConfig: SchoolConfig = {
       "Visakhapatnam"
     ],
     logo: images.logo,
-    favicon: "/favicon.png",
+    favicon: "/favicon.ico",
     socialLinks: [
       {
         label: "Instagram",
