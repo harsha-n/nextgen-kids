@@ -464,7 +464,8 @@ export const schoolConfig: SchoolConfig = {
     address: schoolAddress,
     googleMapsUrl,
     domain: "https://www.nextgenkidsvizag.com",
-    timings: "Monday to Saturday, 9:00 AM to 6:00 PM",
+    timings:
+      "Monday to Friday, 9:00 AM to 7:30 PM; Saturday, 9:00 AM to 4:00 PM; Sunday closed",
     establishedYear: "2026",
     nearbyAreas: [
       "Midhilapuri",
@@ -901,7 +902,8 @@ export const schoolConfig: SchoolConfig = {
     title: "Safe extended care for working parent schedules",
     description:
       "Daycare at NextGen Kids is calm, supervised, and caring, with indoor play, rest, hygiene support, and careful handover routines.",
-    timings: "Extended daycare support available until 6:00 PM",
+    timings:
+      "Extended daycare support available until 7:30 PM on weekdays and 4:00 PM on Saturday",
     benefits: [
       {
         title: "Supervised play",
@@ -1387,7 +1389,7 @@ export const schoolConfig: SchoolConfig = {
       {
         question: "What are the timings?",
         answer:
-          "The current website timing is Monday to Saturday, 9:00 AM to 6:00 PM. Please confirm exact class-wise and daycare timings with the admissions office."
+          "The current timing is Monday to Friday, 9:00 AM to 7:30 PM; Saturday, 9:00 AM to 4:00 PM; and Sunday closed. Please confirm class-wise and daycare timing details with the admissions office."
       },
       {
         question: "How do you update parents?",
