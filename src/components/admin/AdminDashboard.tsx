@@ -1,7 +1,18 @@
 "use client";
 
 import type { ChangeEvent, ReactNode } from "react";
-import { LogOut, RotateCcw, Save, Upload } from "lucide-react";
+import {
+  CalendarDays,
+  ExternalLink,
+  LogOut,
+  Mail,
+  MessageSquare,
+  Phone,
+  RefreshCw,
+  RotateCcw,
+  Save,
+  Upload
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import type { GalleryItem, ImageAsset, SchoolConfig } from "@/data/school.config";
 import {
@@ -15,6 +26,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 type AdminStatus = {
   supabaseConfigured: boolean;
@@ -27,8 +39,26 @@ type AdminDashboardProps = {
   status: AdminStatus;
 };
 
+type EnquiryLead = {
+  rowNumber: number;
+  timestamp: string;
+  parentName: string;
+  childName: string;
+  childAge: string;
+  phone: string;
+  email: string;
+  program: string;
+  preferredVisitDate: string;
+  message: string;
+  pageUrl: string;
+  status: string;
+  notes: string;
+  updatedAt: string;
+};
+
 type TabKey =
   | "overview"
+  | "leads"
   | "school"
   | "pages"
   | "programs"
@@ -41,6 +71,7 @@ type TabKey =
 
 const tabs: { key: TabKey; label: string }[] = [
   { key: "overview", label: "Overview" },
+  { key: "leads", label: "Leads" },
   { key: "school", label: "School Info" },
   { key: "pages", label: "Pages" },
   { key: "programs", label: "Programs" },
@@ -50,6 +81,29 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "faqs", label: "FAQs" },
   { key: "seo", label: "SEO" },
   { key: "images", label: "Images & Media" }
+];
+
+const tabDescriptions: Record<TabKey, string> = {
+  overview: "Check setup status before publishing changes.",
+  leads: "View enquiry rows from Google Sheets and update follow-up notes.",
+  school: "Edit public school contact, address, timing, and location content.",
+  pages: "Adjust page header copy across the website.",
+  programs: "Maintain play school, nursery, LKG, UKG, and daycare content.",
+  fees: "Keep fee placeholders or updated public fee notes in one place.",
+  gallery: "Add, remove, and label gallery images.",
+  testimonials: "Edit parent testimonials shown on the website.",
+  faqs: "Update parent-focused questions and answers.",
+  seo: "Tune page titles, descriptions, canonical paths, and keywords.",
+  images: "Replace website images by location or restore default assets."
+};
+
+const leadStatuses = [
+  "New",
+  "Contacted",
+  "Visit scheduled",
+  "Admitted",
+  "Not reachable",
+  "Closed"
 ];
 
 function stringList(value: string[]) {
@@ -245,16 +299,21 @@ export function AdminDashboard({ initialConfig, status }: AdminDashboardProps) {
   }
 
   return (
-    <div className="min-h-screen bg-skysoft-50/65 py-10">
-      <div className="container">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="min-h-screen bg-slate-50">
+      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex max-w-[1500px] flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
           <div>
-            <p className="text-sm font-extrabold uppercase tracking-[0.14em] text-coral-600">
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-coral-600">
               NextGen Kids Admin
             </p>
-            <h1 className="mt-2 text-3xl font-extrabold text-slate-950">Website editor</h1>
+            <h1 className="mt-1 text-2xl font-extrabold text-slate-950 md:text-3xl">
+              Website editor
+            </h1>
+            <p className="mt-1 max-w-2xl text-sm leading-6 text-slate-600">
+              Manage public website content, images, SEO, and admission leads.
+            </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Button type="button" onClick={() => save()} disabled={isSaving}>
               <Save className="h-4 w-4" aria-hidden="true" />
               {isSaving ? "Saving..." : "Save changes"}
@@ -265,29 +324,40 @@ export function AdminDashboard({ initialConfig, status }: AdminDashboardProps) {
             </Button>
           </div>
         </div>
+      </header>
 
+      <main className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8">
         {message ? (
-          <div className="mt-5 rounded-md border border-sunshine-100 bg-white px-4 py-3 text-sm font-semibold text-slate-700">
+          <div className="mb-5 rounded-lg border border-sunshine-100 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm">
             {message}
           </div>
         ) : null}
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-[260px_1fr]">
-          <Card className="h-fit bg-white">
+        <div className="grid gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
+          <Card className="h-fit bg-white shadow-sm lg:sticky lg:top-28">
             <CardContent className="p-3">
-              <nav className="grid gap-1">
+              <nav className="flex gap-2 overflow-x-auto pb-1 lg:grid lg:overflow-visible lg:pb-0">
                 {tabs.map((tab) => (
                   <button
                     key={tab.key}
                     type="button"
                     onClick={() => setActiveTab(tab.key)}
-                    className={`rounded-md px-3 py-2 text-left text-sm font-extrabold transition ${
+                    className={cn(
+                      "min-w-max rounded-lg px-3 py-2 text-left text-sm font-extrabold transition lg:min-w-0",
                       activeTab === tab.key
-                        ? "bg-coral-500 text-white"
+                        ? "bg-coral-500 text-white shadow-sm"
                         : "text-slate-700 hover:bg-sunshine-50"
-                    }`}
+                    )}
                   >
-                    {tab.label}
+                    <span>{tab.label}</span>
+                    <span
+                      className={cn(
+                        "mt-1 hidden text-xs font-semibold leading-5 lg:block",
+                        activeTab === tab.key ? "text-white/85" : "text-slate-500"
+                      )}
+                    >
+                      {tabDescriptions[tab.key]}
+                    </span>
                   </button>
                 ))}
               </nav>
@@ -310,6 +380,8 @@ export function AdminDashboard({ initialConfig, status }: AdminDashboardProps) {
                 </CardContent>
               </Card>
             ) : null}
+
+            {activeTab === "leads" ? <LeadsPanel /> : null}
 
             {activeTab === "school" ? (
               <Section title="School info">
@@ -513,19 +585,321 @@ export function AdminDashboard({ initialConfig, status }: AdminDashboardProps) {
             ) : null}
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Card>
+    <Card className="bg-white shadow-sm">
       <CardContent className="p-6">
         <h2 className="mb-5 text-xl font-extrabold text-slate-950">{title}</h2>
         {children}
       </CardContent>
     </Card>
+  );
+}
+
+function formatLeadDate(value: string) {
+  if (!value) {
+    return "Not shared";
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: value.includes("T") ? "numeric" : undefined,
+    minute: value.includes("T") ? "2-digit" : undefined
+  }).format(parsed);
+}
+
+function phoneHref(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  return digits ? `tel:${digits}` : undefined;
+}
+
+function whatsappHref(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+
+  if (!digits) {
+    return undefined;
+  }
+
+  const normalized = digits.length === 10 ? `91${digits}` : digits;
+  return `https://wa.me/${normalized}`;
+}
+
+function updateLeadDraft(
+  leads: EnquiryLead[],
+  rowNumber: number,
+  values: Partial<Pick<EnquiryLead, "status" | "notes">>
+) {
+  return leads.map((lead) => (lead.rowNumber === rowNumber ? { ...lead, ...values } : lead));
+}
+
+function LeadsPanel() {
+  const [leads, setLeads] = useState<EnquiryLead[]>([]);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [savingRow, setSavingRow] = useState<number | null>(null);
+  const [notice, setNotice] = useState("");
+
+  async function loadLeads() {
+    setIsLoading(true);
+    setNotice("");
+
+    try {
+      const response = await fetch("/api/admin/leads", { cache: "no-store" });
+      const body = (await response.json()) as {
+        ok: boolean;
+        leads?: EnquiryLead[];
+        message?: string;
+      };
+
+      if (!response.ok || !body.ok) {
+        throw new Error(body.message || "Could not load leads.");
+      }
+
+      setLeads(body.leads ?? []);
+      setHasLoaded(true);
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Could not load leads.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function saveLead(lead: EnquiryLead) {
+    setSavingRow(lead.rowNumber);
+    setNotice("");
+
+    try {
+      const response = await fetch("/api/admin/leads", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rowNumber: lead.rowNumber,
+          status: lead.status,
+          notes: lead.notes
+        })
+      });
+      const body = (await response.json()) as {
+        ok: boolean;
+        lead?: EnquiryLead;
+        message?: string;
+      };
+
+      if (!response.ok || !body.ok || !body.lead) {
+        throw new Error(body.message || "Could not update lead.");
+      }
+
+      const updatedLead = body.lead;
+      setLeads((current) =>
+        current.map((currentLead) =>
+          currentLead.rowNumber === updatedLead.rowNumber ? updatedLead : currentLead
+        )
+      );
+      setNotice("Lead updated in Google Sheet.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Could not update lead.");
+    } finally {
+      setSavingRow(null);
+    }
+  }
+
+  return (
+    <Section title="Admission leads">
+      <div className="mb-5 rounded-lg border border-skysoft-100 bg-skysoft-50/60 p-4">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-extrabold text-slate-950">
+              Google Sheet lead viewer
+            </p>
+            <p className="mt-1 text-sm leading-6 text-slate-600">
+              Leads load only when you click refresh. Status and notes are saved back to the enquiry sheet.
+            </p>
+          </div>
+          <Button type="button" variant="outline" onClick={loadLeads} disabled={isLoading}>
+            <RefreshCw
+              className={cn("h-4 w-4", isLoading && "animate-spin")}
+              aria-hidden="true"
+            />
+            {hasLoaded ? "Refresh leads" : "Load leads"}
+          </Button>
+        </div>
+      </div>
+
+      {notice ? (
+        <div className="mb-5 rounded-md border border-sunshine-100 bg-white px-4 py-3 text-sm font-semibold text-slate-700">
+          {notice}
+        </div>
+      ) : null}
+
+      {!hasLoaded ? (
+        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center">
+          <MessageSquare className="mx-auto h-10 w-10 text-slate-400" aria-hidden="true" />
+          <p className="mt-3 text-sm font-extrabold text-slate-900">
+            Click Load leads when you want to check enquiries.
+          </p>
+          <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-slate-600">
+            This avoids background polling and keeps the public enquiry flow as the priority.
+          </p>
+        </div>
+      ) : leads.length === 0 ? (
+        <div className="rounded-lg border border-dashed border-slate-300 bg-white p-8 text-center">
+          <p className="text-sm font-extrabold text-slate-900">No leads found yet.</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {leads.map((lead) => (
+            <Card key={lead.rowNumber} className="bg-white">
+              <CardContent className="p-5">
+                <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                  <div>
+                    <p className="text-lg font-extrabold text-slate-950">
+                      {lead.parentName || "Unnamed parent"}
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      Child: <span className="font-bold text-slate-800">{lead.childName || "Not shared"}</span>
+                      {lead.childAge ? `, ${lead.childAge}` : ""}
+                      {lead.program ? ` | ${lead.program}` : ""}
+                    </p>
+                  </div>
+                  <span className="w-fit rounded-full bg-sunshine-50 px-3 py-1 text-xs font-extrabold text-coral-700">
+                    {lead.status || "New"}
+                  </span>
+                </div>
+
+                <div className="mt-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                  <LeadFact icon={<Phone className="h-4 w-4" />} label="Phone">
+                    {phoneHref(lead.phone) ? (
+                      <a className="font-bold text-slate-900 underline-offset-4 hover:underline" href={phoneHref(lead.phone)}>
+                        {lead.phone}
+                      </a>
+                    ) : (
+                      "Not shared"
+                    )}
+                  </LeadFact>
+                  <LeadFact icon={<Mail className="h-4 w-4" />} label="Email">
+                    {lead.email ? (
+                      <a className="font-bold text-slate-900 underline-offset-4 hover:underline" href={`mailto:${lead.email}`}>
+                        {lead.email}
+                      </a>
+                    ) : (
+                      "Not shared"
+                    )}
+                  </LeadFact>
+                  <LeadFact icon={<CalendarDays className="h-4 w-4" />} label="Visit date">
+                    {formatLeadDate(lead.preferredVisitDate)}
+                  </LeadFact>
+                  <LeadFact icon={<MessageSquare className="h-4 w-4" />} label="Submitted">
+                    {formatLeadDate(lead.timestamp)}
+                  </LeadFact>
+                </div>
+
+                {lead.message ? (
+                  <div className="mt-4 rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700">
+                    {lead.message}
+                  </div>
+                ) : null}
+
+                <div className="mt-5 grid gap-4 lg:grid-cols-[220px_1fr_auto] lg:items-end">
+                  <div>
+                    <Label>Status</Label>
+                    <select
+                      className="mt-2 flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      value={lead.status || "New"}
+                      onChange={(event) =>
+                        setLeads((current) =>
+                          updateLeadDraft(current, lead.rowNumber, { status: event.target.value })
+                        )
+                      }
+                    >
+                      {leadStatuses.map((status) => (
+                        <option key={status} value={status}>
+                          {status}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <Label>Admin notes</Label>
+                    <Textarea
+                      className="mt-2 min-h-11"
+                      value={lead.notes || ""}
+                      placeholder="Add follow-up notes"
+                      onChange={(event) =>
+                        setLeads((current) =>
+                          updateLeadDraft(current, lead.rowNumber, { notes: event.target.value })
+                        )
+                      }
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {whatsappHref(lead.phone) ? (
+                      <a
+                        href={whatsappHref(lead.phone)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex h-10 items-center justify-center rounded-md border px-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+                      >
+                        WhatsApp
+                      </a>
+                    ) : null}
+                    {lead.pageUrl ? (
+                      <a
+                        href={lead.pageUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex h-10 items-center justify-center rounded-md border px-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50"
+                      >
+                        <ExternalLink className="mr-2 h-4 w-4" aria-hidden="true" />
+                        Page
+                      </a>
+                    ) : null}
+                    <Button
+                      type="button"
+                      onClick={() => saveLead(lead)}
+                      disabled={savingRow === lead.rowNumber}
+                    >
+                      {savingRow === lead.rowNumber ? "Saving..." : "Save"}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </Section>
+  );
+}
+
+function LeadFact({
+  icon,
+  label,
+  children
+}: {
+  icon: ReactNode;
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm">
+      <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.12em] text-slate-500">
+        {icon}
+        {label}
+      </div>
+      <div className="mt-2 break-words text-slate-700">{children}</div>
+    </div>
   );
 }
 

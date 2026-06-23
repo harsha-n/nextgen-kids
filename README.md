@@ -43,6 +43,21 @@ Google Apps Script setup:
 
 For local testing, copy `.env.example` to `.env.local` and fill both variables. The WhatsApp button after successful submission uses `schoolInfo.whatsapp` and `contact.whatsappCtaMessage` from `src/data/school.config.ts`.
 
+Lead capture priority:
+
+- The Google Sheet row is written before the email alert is attempted.
+- If email quota is exhausted, the lead can still be saved to the Sheet.
+- The admin Leads tab is manual-only; it does not poll in the background.
+- Loading leads or saving admin notes uses Apps Script executions and Sheet read/write calls, but it does not use email-send quota.
+- Current Google Apps Script quotas are documented by Google at `https://developers.google.com/apps-script/guides/services/quotas`.
+
+Admin lead viewer setup:
+
+1. Paste the latest `scripts/google-apps-script/enquiry-webhook.gs` into the same Apps Script project.
+2. Redeploy the Web App as a new version so `listLeads` and `updateLead` are available.
+3. Open `/admin`, go to **Leads**, and click **Load leads**.
+4. Status and admin notes save back to the same Google Sheet.
+
 ## Admin CMS
 
 The protected admin area is available at:
@@ -51,7 +66,7 @@ The protected admin area is available at:
 /admin
 ```
 
-Use it to update public website content, fees, FAQs, testimonials, page SEO, gallery images, and named website image slots such as Home Hero, Contact Header, Safety Main, and Program images.
+Use it to update public website content, fees, FAQs, testimonials, page SEO, gallery images, named website image slots such as Home Hero, Contact Header, Safety Main, and Program images, plus admission lead status/notes.
 
 Admin content storage:
 

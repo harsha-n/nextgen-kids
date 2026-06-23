@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertCircle, CheckCircle, Loader2, MessageCircle, Send } from "lucide-react";
+import { AlertCircle, CalendarDays, CheckCircle, Loader2, MessageCircle, Send } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -19,6 +19,41 @@ type ContactFormProps = {
   schoolInfo: SchoolConfig["schoolInfo"];
 };
 
+type DateInputElement = HTMLInputElement & {
+  showPicker?: () => void;
+};
+
+function formatDateLabel(value?: string) {
+  if (!value) {
+    return "";
+  }
+
+  const [year, month, day] = value.split("-").map(Number);
+
+  if (!year || !month || !day) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric"
+  }).format(new Date(year, month - 1, day));
+}
+
+function openDatePicker(input: DateInputElement) {
+  if (typeof input.showPicker === "function") {
+    try {
+      input.showPicker();
+    } catch {
+      input.focus();
+    }
+    return;
+  }
+
+  input.focus();
+}
+
 export function ContactForm({ contact, programs, schoolInfo }: ContactFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,6 +62,7 @@ export function ContactForm({ contact, programs, schoolInfo }: ContactFormProps)
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors }
   } = useForm<EnquiryPayload>({
     resolver: zodResolver(enquirySchema),
@@ -140,6 +176,10 @@ export function ContactForm({ contact, programs, schoolInfo }: ContactFormProps)
             const error = errors[field.id]?.message;
             const options = getOptions(field.id, field.options);
             const fieldId = `enquiry-${field.id}`;
+            const dateValue =
+              field.type === "date" ? String(watch(field.id) || "") : "";
+            const dateRegistration =
+              field.type === "date" ? register(field.id) : null;
 
             return (
               <div
@@ -170,6 +210,32 @@ export function ContactForm({ contact, programs, schoolInfo }: ContactFormProps)
                       </option>
                     ))}
                   </select>
+                ) : field.type === "date" && dateRegistration ? (
+                  <div className="relative mt-2 h-11 overflow-hidden rounded-md border border-input bg-background ring-offset-background transition focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none flex h-full items-center justify-between gap-3 px-3 text-sm"
+                    >
+                      <span
+                        className={cn(
+                          "truncate",
+                          dateValue ? "font-semibold text-slate-900" : "text-muted-foreground"
+                        )}
+                      >
+                        {dateValue ? formatDateLabel(dateValue) : field.placeholder}
+                      </span>
+                      <CalendarDays className="h-4 w-4 shrink-0 text-slate-500" />
+                    </div>
+                    <input
+                      id={fieldId}
+                      type="date"
+                      aria-label={field.label}
+                      className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                      {...dateRegistration}
+                      onClick={(event) => openDatePicker(event.currentTarget)}
+                      onFocus={(event) => openDatePicker(event.currentTarget)}
+                    />
+                  </div>
                 ) : (
                   <Input
                     id={fieldId}

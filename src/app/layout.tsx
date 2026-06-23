@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
-import { Footer } from "@/components/layout/Footer";
-import { Navbar } from "@/components/layout/Navbar";
-import { SEOJsonLd } from "@/components/seo/SEOJsonLd";
+import { SiteChrome } from "@/components/layout/SiteChrome";
 import { getSchoolConfig } from "@/lib/runtime-config";
 import { generatePageMetadata } from "@/lib/seo";
 
@@ -30,10 +28,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body>
-        <SEOJsonLd config={config} />
-        <Navbar config={config} />
-        <main>{children}</main>
-        <Footer config={config} />
+        <SiteChrome config={config}>{children}</SiteChrome>
         <Analytics />
       </body>
     </html>
