@@ -247,5 +247,7 @@ function plainText(value) {
 }
 
 function jsonResponse(body) {
-  return HtmlService.createHtmlOutput(JSON.stringify(body));
+  return ContentService
+    .createTextOutput(JSON.stringify(body))
+    .setMimeType(ContentService.MimeType.JSON);
 }
