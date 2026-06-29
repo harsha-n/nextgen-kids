@@ -109,6 +109,7 @@ export type SchoolConfig = {
     socialLinks: {
       label: string;
       href: string;
+      visible: boolean;
     }[];
   };
   seo: {
@@ -447,7 +448,7 @@ const sharedKeywords = [
 const schoolAddress =
   "G1, Ground Floor, Sumo Heights Apartment, Opp. Westside, Near Kalam Jr. College, Midhilapuri Vuda Colony, Vishakapatnam - 530041";
 const mapsQuery = encodeURIComponent(`NextGen Kids Play School, ${schoolAddress}`);
-const googleMapsUrl = "https://maps.app.goo.gl/xacj2n28oHdCqnvr7";
+const googleMapsUrl = "https://maps.app.goo.gl/4RpwsjRPoLDyrtpRA";
 
 export const schoolConfig: SchoolConfig = {
   schoolInfo: {
@@ -480,15 +481,18 @@ export const schoolConfig: SchoolConfig = {
     socialLinks: [
       {
         label: "Instagram",
-        href: "https://www.instagram.com/nextgenkidsplayschool"
+        href: "https://www.instagram.com/nextgenkidsplayschool",
+        visible: false
       },
       {
         label: "Facebook",
-        href: "https://www.facebook.com/nextgenkidsplayschool"
+        href: "https://www.facebook.com/nextgenkidsplayschool",
+        visible: false
       },
       {
         label: "Google Maps",
-        href: googleMapsUrl
+        href: googleMapsUrl,
+        visible: true
       }
     ]
   },

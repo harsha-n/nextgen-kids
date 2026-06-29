@@ -31,7 +31,7 @@ export function Footer({ config }: FooterProps) {
           </Link>
           <p className="mt-5 max-w-sm text-sm leading-6 text-white/70">{schoolInfo.description}</p>
           <div className="mt-5 flex flex-wrap gap-3">
-            {schoolInfo.socialLinks.map((link) => (
+            {schoolInfo.socialLinks.filter((link) => link.visible).map((link) => (
               <a
                 key={link.href}
                 href={link.href}

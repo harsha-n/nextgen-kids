@@ -430,6 +430,45 @@ export function AdminDashboard({ initialConfig, status }: AdminDashboardProps) {
                       textarea
                     />
                   </div>
+                  <div className="md:col-span-2">
+                    <h3 className="mb-4 text-lg font-extrabold text-slate-950">Social Links</h3>
+                    <div className="space-y-4">
+                      {config.schoolInfo.socialLinks.map((link, index) => (
+                        <Card key={index} className="bg-slate-50">
+                          <CardContent className="grid gap-4 p-4 md:grid-cols-3">
+                            <div>
+                              <Label>Label</Label>
+                              <Input
+                                className="mt-2"
+                                value={link.label}
+                                onChange={(event) => updateAt(["schoolInfo", "socialLinks", index, "label"], event.target.value)}
+                              />
+                            </div>
+                            <div>
+                              <Label>URL</Label>
+                              <Input
+                                className="mt-2"
+                                value={link.href}
+                                onChange={(event) => updateAt(["schoolInfo", "socialLinks", index, "href"], event.target.value)}
+                              />
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                id={`visible-${index}`}
+                                checked={link.visible}
+                                onChange={(event) => updateAt(["schoolInfo", "socialLinks", index, "visible"], event.target.checked)}
+                                className="h-4 w-4 rounded border-gray-300 text-coral-600 focus:ring-coral-500"
+                              />
+                              <Label htmlFor={`visible-${index}`} className="cursor-pointer">
+                                Visible on website
+                              </Label>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </Section>
             ) : null}
