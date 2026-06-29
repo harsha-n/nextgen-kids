@@ -3,7 +3,7 @@ import { AdmissionCTA } from "@/components/sections/AdmissionCTA";
 import { FAQSection } from "@/components/sections/FAQSection";
 import { PageHeader } from "@/components/sections/PageHeader";
 import { getSchoolConfig } from "@/lib/runtime-config";
-import { generatePageMetadata } from "@/lib/seo";
+import { generatePageMetadata, getFaqJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
@@ -17,6 +17,10 @@ export default async function FAQsPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(getFaqJsonLd(config)) }}
+      />
       <PageHeader content={config.pageContent.faqs} />
       <FAQSection faqs={config.faqs} />
       <AdmissionCTA cta={config.ctas.contact} />

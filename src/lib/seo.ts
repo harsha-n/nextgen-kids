@@ -84,6 +84,11 @@ export function getJsonLd(config: SchoolConfig = schoolConfig) {
       addressLocality: schoolInfo.city,
       addressCountry: "IN"
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: "17.7331",
+      longitude: "83.3191"
+    },
     areaServed: schoolInfo.nearbyAreas.map((area) => ({
       "@type": "Place",
       name: area
@@ -92,7 +97,7 @@ export function getJsonLd(config: SchoolConfig = schoolConfig) {
     openingHours: schoolInfo.timings,
     image: absoluteUrl(config.seo.ogImage, config),
     logo: absoluteUrl(schoolInfo.logo.src, config),
-    sameAs: schoolInfo.socialLinks.map((link) => link.href),
+    sameAs: schoolInfo.socialLinks.filter((link) => link.visible).map((link) => link.href),
     makesOffer: config.programs.items.map((program) => ({
       "@type": "Offer",
       itemOffered: {
@@ -102,5 +107,50 @@ export function getJsonLd(config: SchoolConfig = schoolConfig) {
         educationalProgramMode: "Onsite"
       }
     }))
+  };
+}
+
+export function getFaqJsonLd(config: SchoolConfig = schoolConfig) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: config.faqs.items.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer
+      }
+    }))
+  };
+}
+
+export function getBreadcrumbJsonLd(pageKey: string, config: SchoolConfig = schoolConfig) {
+  const page = getPageSeo(pageKey, config);
+  const homeUrl = absoluteUrl("/", config);
+  const pageUrl = absoluteUrl(page.path, config);
+
+  const breadcrumbs = [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: homeUrl
+    }
+  ];
+
+  if (pageKey !== "home") {
+    breadcrumbs.push({
+      "@type": "ListItem",
+      position: 2,
+      name: page.title,
+      item: pageUrl
+    });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs
   };
 }
