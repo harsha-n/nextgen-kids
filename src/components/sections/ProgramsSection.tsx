@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { SchoolConfig } from "@/data/school.config";
 import { AnimatedCard } from "./AnimatedCard";
 import { ProgramCard } from "./ProgramCard";
@@ -18,6 +19,14 @@ export function ProgramsSection({ programs }: ProgramsSectionProps) {
           title={programs.title}
           description={programs.description}
         />
+        <div className="mt-4 text-center">
+          <Link
+            href="/admissions"
+            className="inline-flex items-center text-sm font-bold text-coral-600 hover:text-coral-700"
+          >
+            Start admission enquiry →
+          </Link>
+        </div>
         <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {programs.items.map((program, index) => (
             <AnimatedCard key={program.title} delay={index * 0.04}>

@@ -111,14 +111,27 @@ export function HeroSection({ hero, schoolInfo }: HeroSectionProps) {
         >
           {hero.trustBadges.map((badge) => {
             const Icon = getIcon(badge.icon);
-            return (
-              <div
-                key={badge.title}
-                className="rounded-lg bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur"
-              >
+            const badgeContent = (
+              <>
                 <Icon className="mb-3 h-5 w-5 text-sunshine-100" aria-hidden="true" />
                 <p className="font-extrabold">{badge.title}</p>
                 <p className="mt-1 text-sm text-white/80">{badge.description}</p>
+              </>
+            );
+            return (
+              <div
+                key={badge.title}
+                className={badge.link ? "cursor-pointer transition hover:bg-white/20" : "rounded-lg bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur"}
+              >
+                {badge.link ? (
+                  <Link href={badge.link} className="block rounded-lg bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur">
+                    {badgeContent}
+                  </Link>
+                ) : (
+                  <div className="rounded-lg bg-white/10 p-4 ring-1 ring-white/20 backdrop-blur">
+                    {badgeContent}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -131,11 +144,8 @@ export function HeroSection({ hero, schoolInfo }: HeroSectionProps) {
         >
           {hero.floatingBadges.map((badge) => {
             const Icon = getIcon(badge.icon);
-            return (
-              <div
-                key={badge.title}
-                className="flex items-center gap-3 rounded-lg bg-white/90 p-4 text-slate-900 shadow-soft ring-1 ring-white/60 backdrop-blur"
-              >
+            const badgeContent = (
+              <>
                 <span className="flex h-10 w-10 items-center justify-center rounded-md bg-sunshine-100 text-coral-600">
                   <Icon className="h-5 w-5" aria-hidden="true" />
                 </span>
@@ -143,6 +153,25 @@ export function HeroSection({ hero, schoolInfo }: HeroSectionProps) {
                   <span className="block text-sm font-extrabold">{badge.title}</span>
                   <span className="block text-xs font-semibold text-slate-500">{badge.description}</span>
                 </span>
+              </>
+            );
+            return (
+              <div
+                key={badge.title}
+                className={badge.link ? "pointer-events-auto" : "pointer-events-none"}
+              >
+                {badge.link ? (
+                  <Link
+                    href={badge.link}
+                    className="flex items-center gap-3 rounded-lg bg-white/90 p-4 text-slate-900 shadow-soft ring-1 ring-white/60 backdrop-blur transition hover:bg-white"
+                  >
+                    {badgeContent}
+                  </Link>
+                ) : (
+                  <div className="flex items-center gap-3 rounded-lg bg-white/90 p-4 text-slate-900 shadow-soft ring-1 ring-white/60 backdrop-blur">
+                    {badgeContent}
+                  </div>
+                )}
               </div>
             );
           })}

@@ -86,8 +86,8 @@ export function getJsonLd(config: SchoolConfig = schoolConfig) {
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: "17.7331",
-      longitude: "83.3191"
+      latitude: "17.8051875",
+      longitude: "83.3585625"
     },
     areaServed: schoolInfo.nearbyAreas.map((area) => ({
       "@type": "Place",

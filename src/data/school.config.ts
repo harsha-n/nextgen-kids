@@ -71,6 +71,7 @@ export type SimpleItem = {
   title: string;
   description: string;
   icon: IconName;
+  link?: string;
 };
 
 export type GalleryItem = ImageAsset & {
@@ -354,7 +355,7 @@ const images = {
   },
   campusExterior: {
     src: "/images/campus/exterior-signage.jpeg",
-    alt: "NextGen Kids Play School campus exterior at Sumo Heights Vishakapatnam",
+    alt: "NextGen Kids Play School campus exterior in Midhilapuri, Visakhapatnam",
     width: 1600,
     height: 901
   },
@@ -415,38 +416,35 @@ const images = {
 } satisfies Record<string, ImageAsset>;
 
 const sharedKeywords = [
-  "best play school in Midhilapuri",
-  "best play school in Madhuravada",
-  "best play school in Pothinamallayya Palem",
-  "best play school in PM Palem",
-  "best play school in Vishakapatnam",
-  "best play school in Visakhapatnam",
-  "preschool admissions in Midhilapuri",
-  "preschool admissions in Madhuravada",
-  "preschool admissions in Pothinamallayya Palem",
-  "preschool admissions in PM Palem",
-  "preschool admissions in Vishakapatnam",
-  "preschool admissions in Visakhapatnam",
+  "play school in Midhilapuri",
+  "preschool in Midhilapuri",
   "daycare in Midhilapuri",
-  "daycare in Madhuravada",
-  "daycare in Pothinamallayya Palem",
-  "daycare in PM Palem",
-  "daycare in Vishakapatnam",
   "nursery school in Midhilapuri",
-  "nursery school in Madhuravada",
-  "nursery school in Pothinamallayya Palem",
-  "kindergarten in Vishakapatnam",
-  "NextGen Kids admissions",
-  "play school near Westside Vishakapatnam",
-  "preschool near Kalam Jr. College Vishakapatnam",
+  "LKG admission in Midhilapuri",
+  "UKG admission in Midhilapuri",
+  "play school in Midhilapuri VUDA Colony",
+  "preschool near Westside Midhilapuri",
+  "play school near Kalam Jr College",
+  "preschool in Madhurawada",
+  "daycare in Madhurawada",
+  "nursery school in Madhurawada",
+  "preschool near PM Palem",
+  "play school near Pothinamallayya Palem",
+  "preschool in Visakhapatnam",
+  "play school in Visakhapatnam",
+  "daycare in Visakhapatnam",
+  "preschool in Vizag",
+  "play school in Vizag",
+  "daycare in Vizag",
+  "NextGen Kids Play School",
+  "NextGen Kids Midhilapuri",
+  "NextGen Kids Visakhapatnam",
   "play school near Madhuravada",
-  "preschool near Pothinamallayya Palem",
-  "daycare near PM Palem",
-  "activity based learning preschool Vishakapatnam"
+  "preschool near Madhuravada"
 ];
 
 const schoolAddress =
-  "G1, Ground Floor, Sumo Heights Apartment, Opp. Westside, Near Kalam Jr. College, Midhilapuri Vuda Colony, Vishakapatnam - 530041";
+  "G1, Ground Floor, Sumo Heights Apartment, Opp. Westside, Near Kalam Jr. College, Midhilapuri VUDA Colony, Visakhapatnam - 530041";
 const mapsQuery = encodeURIComponent(`NextGen Kids Play School, ${schoolAddress}`);
 const googleMapsUrl = "https://maps.app.goo.gl/4RpwsjRPoLDyrtpRA";
 
@@ -455,9 +453,9 @@ export const schoolConfig: SchoolConfig = {
     name: "NextGen Kids",
     tagline: "Learn. Play. Grow.",
     description:
-      "A warm play school and daycare in Midhilapuri, Vishakapatnam for children aged 2 to 6, offering Play Group, Nursery, LKG, UKG, dance, music, caring teachers, and activity-based learning.",
+      "A warm play school and daycare in Midhilapuri, Visakhapatnam for children aged 2 to 6, offering Play Group, Nursery, LKG, UKG, dance, music, caring teachers, and activity-based learning.",
     type: "Play School / Preschool / Daycare",
-    city: "Vishakapatnam",
+    city: "Visakhapatnam",
     boardOrApproach: "Play-way, activity-based, kindergarten-readiness approach",
     phone: "+91 85208 15889",
     whatsapp: "+91 85208 15889",
@@ -470,11 +468,11 @@ export const schoolConfig: SchoolConfig = {
     establishedYear: "2026",
     nearbyAreas: [
       "Midhilapuri",
-      "Madhuravada",
+      "Madhurawada",
       "Pothinamallayya Palem",
       "PM Palem",
-      "Vishakapatnam",
-      "Visakhapatnam"
+      "Visakhapatnam",
+      "Vizag"
     ],
     logo: images.logo,
     favicon: "/favicon.ico",
@@ -498,17 +496,17 @@ export const schoolConfig: SchoolConfig = {
   },
   seo: {
     defaultTitle:
-      "NextGen Kids | Play School, Preschool and Daycare in Vishakapatnam",
+      "NextGen Kids | Play School & Daycare in Midhilapuri, Madhurawada, Visakhapatnam",
     titleTemplate: "%s | NextGen Kids",
     defaultDescription:
-      "NextGen Kids is a preschool and daycare in Midhilapuri, Vishakapatnam for ages 2 to 6, serving nearby Madhuravada, Pothinamallayya Palem, and PM Palem with Play Group, Nursery, LKG, UKG, dance, music, safe classrooms, and activity-based learning.",
+      "NextGen Kids is a play school, preschool and daycare in Midhilapuri VUDA Colony, near Madhurawada, Visakhapatnam/Vizag, offering Play Group, Nursery, LKG, UKG and extended daycare.",
     keywords: sharedKeywords,
     ogImage: images.campusExterior.src,
     pages: {
       home: {
-        title: "Play School, Preschool and Daycare in Vishakapatnam",
+        title: "Play School & Daycare in Midhilapuri, Madhurawada | NextGen Kids",
         description:
-          "Discover NextGen Kids Play School in Midhilapuri, Vishakapatnam, near Madhuravada, Pothinamallayya Palem, and PM Palem for Play Group, Nursery, LKG, UKG, daycare, dance, music, and joyful early learning.",
+          "NextGen Kids is a play school, preschool and daycare in Midhilapuri VUDA Colony, near Madhurawada, Visakhapatnam/Vizag, offering Play Group, Nursery, LKG, UKG and extended daycare.",
         path: "/",
         keywords: sharedKeywords
       },
@@ -520,34 +518,34 @@ export const schoolConfig: SchoolConfig = {
         keywords: ["about NextGen Kids", "trusted preschool in Midhilapuri", ...sharedKeywords]
       },
       programs: {
-        title: "Preschool Programs for Ages 2 to 6",
+        title: "Play Group, Nursery, LKG & UKG in Midhilapuri | NextGen Kids",
         description:
-          "Explore Play Group, Nursery, LKG, UKG, and Daycare programs at NextGen Kids in Midhilapuri, Vishakapatnam, close to Madhuravada and Pothinamallayya Palem.",
+          "Explore Play Group, Nursery, LKG, UKG, and Daycare programs at NextGen Kids in Midhilapuri, Visakhapatnam, close to Madhurawada and Pothinamallayya Palem.",
         path: "/programs",
         keywords: [
           "play group Midhilapuri",
-          "play group Madhuravada",
-          "LKG UKG admissions Vishakapatnam",
+          "play group Madhurawada",
+          "LKG UKG admissions Visakhapatnam",
           ...sharedKeywords
         ]
       },
       admissions: {
-        title: "Preschool Admissions 2026-27",
+        title: "Preschool Admissions 2026-27 in Midhilapuri, Visakhapatnam",
         description:
-          "Start admission enquiry for 2026-27 at NextGen Kids with campus visit support, age criteria, documents, fees guidance, and daycare details.",
+          "Start admission enquiry for 2026-27 at NextGen Kids in Midhilapuri, Visakhapatnam with campus visit support, age criteria, documents, fees guidance, and daycare details.",
         path: "/admissions",
         keywords: ["NextGen Kids admissions 2026", "preschool admission Midhilapuri", ...sharedKeywords]
       },
       daycare: {
-        title: "Safe Daycare in Vishakapatnam",
+        title: "Daycare in Midhilapuri & Madhurawada, Visakhapatnam",
         description:
-          "NextGen Kids offers daycare in Midhilapuri, Vishakapatnam for families near Madhuravada, Pothinamallayya Palem, and PM Palem with supervised play, rest routines, hygiene, secure pickup, and parent communication.",
+          "NextGen Kids offers daycare in Midhilapuri, Visakhapatnam for families near Madhurawada, Pothinamallayya Palem, and PM Palem with supervised play, rest routines, hygiene, secure pickup, and parent communication.",
         path: "/daycare",
         keywords: [
           "daycare in Midhilapuri",
-          "daycare in Madhuravada",
+          "daycare in Madhurawada",
           "daycare near Pothinamallayya Palem",
-          "safe daycare for kids Vishakapatnam",
+          "safe daycare for kids Visakhapatnam",
           ...sharedKeywords
         ]
       },
@@ -556,35 +554,52 @@ export const schoolConfig: SchoolConfig = {
         description:
           "See how rhymes, music, dance, storytelling, art, slate writing, phonics, number fun, indoor games, and celebrations support everyday learning.",
         path: "/activities",
-        keywords: ["activity based preschool Vishakapatnam", "dance music play school", ...sharedKeywords]
+        keywords: ["activity based preschool Visakhapatnam", "dance music play school", ...sharedKeywords]
       },
       gallery: {
         title: "Preschool Gallery",
         description:
           "View real campus, classroom, activity, story corner, play area, and entry photos from NextGen Kids Play School.",
         path: "/gallery",
-        keywords: ["NextGen Kids gallery", "preschool photos Vishakapatnam", ...sharedKeywords]
+        keywords: ["NextGen Kids gallery", "preschool photos Visakhapatnam", ...sharedKeywords]
       },
       contact: {
-        title: "Contact NextGen Kids",
+        title: "Contact NextGen Kids Play School in Midhilapuri, Visakhapatnam",
         description:
-          "Contact NextGen Kids for preschool admissions, daycare enquiries, visit booking, timings, phone numbers, address, and parent support.",
+          "Contact NextGen Kids for preschool admissions, daycare enquiries, visit booking, timings, phone numbers, address, and parent support in Midhilapuri, Visakhapatnam.",
         path: "/contact",
-        keywords: ["contact NextGen Kids Vishakapatnam", "preschool phone Vishakapatnam", ...sharedKeywords]
+        keywords: ["contact NextGen Kids Visakhapatnam", "preschool phone Visakhapatnam", ...sharedKeywords]
       },
       fees: {
-        title: "Preschool Fees",
+        title: "Play School & Daycare Fees in Midhilapuri | NextGen Kids",
         description:
-          "View fee guidance for Play Group, Nursery, LKG, UKG, daycare, dance, and music at NextGen Kids.",
+          "View fee guidance for Play Group, Nursery, LKG, UKG, daycare, dance, and music at NextGen Kids in Midhilapuri, Visakhapatnam.",
         path: "/fees",
-        keywords: ["preschool fees Vishakapatnam", "daycare fees Vishakapatnam", ...sharedKeywords]
+        keywords: ["preschool fees Visakhapatnam", "daycare fees Visakhapatnam", ...sharedKeywords]
       },
       faqs: {
-        title: "Parent FAQs",
+        title: "Parent FAQs | Play School in Midhilapuri, Visakhapatnam",
         description:
-          "Answers to parent questions about play school age, daycare, safety, timings, parent updates, admissions, dance, music, and required documents.",
+          "Answers to parent questions about play school age, daycare, safety, timings, parent updates, admissions, dance, music, and required documents at NextGen Kids in Midhilapuri, Visakhapatnam.",
         path: "/faqs",
-        keywords: ["preschool FAQs Vishakapatnam", "play school questions Vishakapatnam", ...sharedKeywords]
+        keywords: ["preschool FAQs Visakhapatnam", "play school questions Visakhapatnam", ...sharedKeywords]
+      },
+      localSeo: {
+        title: "Play School in Midhilapuri & Madhurawada",
+        description:
+          "NextGen Kids Play School serves families in Midhilapuri VUDA Colony, near Westside and Kalam Jr. College, Visakhapatnam/Vizag. We offer Play Group, Nursery, LKG, UKG, and daycare with caring teachers and activity-based learning.",
+        path: "/play-school-midhilapuri-madhurawada",
+        keywords: [
+          "play school in Midhilapuri",
+          "preschool in Midhilapuri",
+          "daycare in Midhilapuri",
+          "play school in Madhurawada",
+          "preschool in Madhurawada",
+          "daycare in Madhurawada",
+          "play school near Westside Midhilapuri",
+          "play school near Kalam Jr College",
+          ...sharedKeywords
+        ]
       }
     }
   },
@@ -602,6 +617,7 @@ export const schoolConfig: SchoolConfig = {
       { label: "Fees", href: "/fees" },
       { label: "FAQs", href: "/faqs" },
       { label: "Activities", href: "/activities" },
+      { label: "Local Areas", href: "/play-school-midhilapuri-madhurawada" },
       { label: "Admissions", href: "/admissions" },
       { label: "Contact", href: "/contact" }
     ],
@@ -615,9 +631,9 @@ export const schoolConfig: SchoolConfig = {
   hero: {
     eyebrow: "Play Group, Nursery, LKG, UKG and Daycare",
     statusBadge: "Admissions Open for 2026-27",
-    title: "NextGen Kids Play School in Vishakapatnam",
+    title: "Play School, Preschool & Daycare in Midhilapuri, Madhurawada",
     subtitle:
-      "A caring first-school experience where children learn through play, stories, music, dance, early writing, safe routines, and confident social interaction.",
+      "A caring first-school experience in Midhilapuri VUDA Colony, Visakhapatnam/Vizag where children learn through play, stories, music, dance, early writing, safe routines, and confident social interaction.",
     primaryCta: {
       label: "Enquire for Admission",
       href: "/admissions",
@@ -633,12 +649,14 @@ export const schoolConfig: SchoolConfig = {
       {
         title: "Ages 2 to 6",
         description: "Play Group to UKG",
-        icon: "baby"
+        icon: "baby",
+        link: "/programs"
       },
       {
         title: "Daycare Support",
         description: "Extended care options",
-        icon: "sun"
+        icon: "sun",
+        link: "/daycare"
       },
       {
         title: "Safe Campus",
@@ -660,7 +678,8 @@ export const schoolConfig: SchoolConfig = {
       {
         title: "2026-27",
         description: "Admissions open",
-        icon: "calendar"
+        icon: "calendar",
+        link: "/admissions"
       }
     ],
     phoneCtaLabel: "Call for admission enquiry"

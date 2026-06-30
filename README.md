@@ -201,3 +201,22 @@ Keep Git and GitHub configuration scoped to this folder. Do not change global Gi
 - Add the final Google Maps URL and social links.
 - Validate JSON-LD with Google's Rich Results Test.
 - Run Lighthouse on mobile and desktop after deployment.
+
+## SEO QA Checklist
+
+After SEO changes, verify the following:
+
+- **City Spelling**: No primary visible text uses "Vishakapatnam" (except as alternate keyword). Primary spelling should be "Visakhapatnam" with "Vizag" as natural alternative.
+- **Address Format**: Address uses "Midhilapuri VUDA Colony" (capitalized VUDA) and correct city spelling "Visakhapatnam".
+- **Area Names**: Primary spelling "Madhurawada" used, with "Madhuravada" only as alternate keyword.
+- **Sitemap Coverage**: Sitemap includes all public pages: /, /about, /programs, /admissions, /daycare, /activities, /gallery, /contact, /fees, /faqs, /play-school-midhilapuri-madhurawada.
+- **Domain Verification**: Domain is `https://www.nextgenkidsvizag.com` in school.config.ts.
+- **Unique Titles**: All page SEO titles are unique and descriptive.
+- **Page Descriptions**: All public pages have meta descriptions.
+- **Geo Coordinates**: JSON-LD geo coordinates match Google Business Profile (17.8051875, 83.3585625).
+- **Image Alt Text**: Image alt text uses correct city spelling "Visakhapatnam" and includes locality where natural.
+- **Internal Links**: Homepage has internal links to /programs, /daycare, /admissions, /contact from hero badges and sections.
+- **Footer Navigation**: Footer includes "Local Areas" link to /play-school-midhilapuri-madhurawada.
+- **Keywords**: Shared keywords target local search terms: play school in Midhilapuri, preschool in Midhilapuri, daycare in Midhilapuri, play school in Madhurawada, preschool in Visakhapatnam, etc.
+- **Robots.txt**: Allows crawling and references correct sitemap URL.
+- **Admin Routes**: Admin and API routes are not included in sitemap (automatically handled by sitemap.ts filtering config.seo.pages only).
