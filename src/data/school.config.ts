@@ -1542,7 +1542,7 @@ export const schoolConfig: SchoolConfig = {
     ],
     mapTitle: "Find NextGen Kids Play School",
     mapDescription:
-      "Visit us at Sumo Heights Apartment, opposite Westside, near Kalam Jr. College, Midhilapuri Vuda Colony, Vishakapatnam.",
+      "Visit us at Sumo Heights Apartment, opposite Westside, near Kalam Jr. College, Midhilapuri VUDA Colony, Visakhapatnam.",
     mapEmbedUrl: `https://www.google.com/maps?q=${mapsQuery}&output=embed`,
     privacyNotice: "By submitting this form, you agree to be contacted by our admissions team.",
     loadingLabel: "Submitting...",
